@@ -21,10 +21,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 // * PS4 [6.00, 10.00)
 // * PS5 [1.00, 6.00)
 
-import { Int } from './module/int64.mjs';
-import { Memory,mem } from './module/mem.mjs';
-import { KB, MB } from './module/offset.mjs';
-import { BufferView } from './module/rw.mjs';
+import { Int } from './modules/int64.mjs';
+import { Memory,mem } from './modules/mem.mjs';
+import { KB, MB } from './modules/offset.mjs';
+import { BufferView } from './modules/rw.mjs';
 
 import {
     die,
@@ -35,10 +35,10 @@ import {
     hex,
     hex_np,
     align,
-} from './module/utils.mjs';
+} from './modules/utils.mjs';
 
 import * as config from './config.mjs';
-import * as off from './module/offset.mjs';
+import * as off from './modules/offset.mjs';
 
 // check if we are running on a supported firmware version
 const [is_ps4, version] = (() => {
