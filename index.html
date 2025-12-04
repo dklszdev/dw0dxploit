@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>d0 Exploit - PS4 9.00 Jailbreak</title>
     <style>
-        /* Reset y base */
         * {
             margin: 0;
             padding: 0;
@@ -24,7 +23,6 @@
             overflow-x: hidden;
         }
 
-        /* Contenedor principal */
         .container {
             max-width: 900px;
             width: 100%;
@@ -37,7 +35,6 @@
             backdrop-filter: blur(10px);
         }
 
-        /* Cabecera con logo */
         .header {
             text-align: center;
             margin-bottom: 30px;
@@ -94,7 +91,6 @@
             margin-top: 10px;
         }
 
-        /* Panel de información */
         .info-panel {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -164,7 +160,6 @@
             border-radius: 4px;
         }
 
-        /* Botón de exploit */
         .btn-container {
             display: flex;
             flex-direction: column;
@@ -235,7 +230,6 @@
             100% { transform: scale(1); }
         }
 
-        /* Estado y carga */
         .status-container {
             width: 100%;
             margin: 25px 0;
@@ -281,7 +275,6 @@
             line-height: 1.5;
         }
 
-        /* Instrucciones */
         .instructions {
             background: linear-gradient(145deg, #151820, #10131a);
             border-radius: 15px;
@@ -316,7 +309,6 @@
             padding-left: 10px;
         }
 
-        /* Footer y créditos */
         .footer {
             margin-top: 40px;
             text-align: center;
@@ -356,7 +348,6 @@
             letter-spacing: 1px;
         }
 
-        /* Notas importantes */
         .notes {
             background: linear-gradient(145deg, #2a1a1a, #1a1010);
             border-radius: 15px;
@@ -377,7 +368,6 @@
             content: "🔥";
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
             .container {
                 padding: 20px;
@@ -397,13 +387,33 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        .console-log {
+            background: #0a0a0a;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #00ff00;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #2a2f3a;
+            display: none;
+        }
+
+        .log-entry {
+            margin-bottom: 5px;
+            padding: 3px 0;
+            border-bottom: 1px solid #1a1a1a;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <header class="header">
             <div class="logo-container">
-                <!-- Asegúrate de tener una imagen llamada fr.png en el mismo directorio -->
+                <!-- Imagen fr.png debe estar en el mismo directorio -->
                 <img src="fr.png" alt="d0 Exploit Logo" class="logo">
             </div>
             <h1>d0 Exploit</h1>
@@ -450,6 +460,10 @@
             </div>
         </div>
 
+        <div id="consoleLog" class="console-log">
+            <div class="log-entry">[Sistema] Consola de depuración lista...</div>
+        </div>
+
         <div class="instructions">
             <h3>Instrucciones Paso a Paso</h3>
             <ol>
@@ -484,18 +498,25 @@
         </footer>
     </div>
 
-    <!-- Scripts originales del exploit -->
+    <!-- Scripts originales del exploit pOOBs4 -->
     <script src="./int64.js"></script>
     <script src="./rop.js"></script>
     <script src="./kexploit.js"></script>
-    <script type="modules" src="./alert.mjs"></script>
+    
+    <!-- Si no tienes alert.mjs, aquí está una versión mínima -->
+    <script>
+        // alert.mjs minimal replacement
+        console.log("[d0 Exploit] alert.mjs cargado (versión mínima)");
+    </script>
     
     <script>
         // Variables de estado
         let exploitStarted = false;
+        let consoleLogElement;
         
         // Sobreescribir funciones originales para integrar con la nueva UI
         window.allset = function() {
+            logToConsole("[Éxito] Exploit completado correctamente");
             document.getElementById("statusText").textContent = "¡Exploit Completado!";
             document.getElementById("statusDetail").textContent = "Tu PS4 está lista para cargar payloads. Puedes insertar la USB cuando se te indique.";
             document.querySelector('.loader').style.display = 'none';
@@ -509,8 +530,30 @@
         }
         
         window.awaitpl = function() {
+            logToConsole("[Info] Esperando payload...");
             document.getElementById("statusText").textContent = "Esperando Payload...";
             document.getElementById("statusDetail").textContent = "Preparando para la carga del payload en memoria";
+        }
+        
+        // Función para registrar en consola
+        function logToConsole(message) {
+            if (!consoleLogElement) {
+                consoleLogElement = document.getElementById('consoleLog');
+            }
+            
+            const logEntry = document.createElement('div');
+            logEntry.className = 'log-entry';
+            logEntry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            
+            consoleLogElement.appendChild(logEntry);
+            consoleLogElement.scrollTop = consoleLogElement.scrollHeight;
+            
+            // Mostrar consola si está oculta
+            if (consoleLogElement.style.display === 'none') {
+                consoleLogElement.style.display = 'block';
+            }
+            
+            console.log(message);
         }
         
         // Función para iniciar el exploit
@@ -528,6 +571,34 @@
             startBtn.innerHTML = '<span class="btn-icon">⏳</span> EJECUTANDO EXPLOIT...';
             statusContainer.style.display = 'block';
             
+            // Mostrar consola de depuración
+            consoleLogElement = document.getElementById('consoleLog');
+            consoleLogElement.style.display = 'block';
+            
+            logToConsole("[Inicio] d0 Exploit inicializando...");
+            logToConsole("[Sistema] Cargando módulos del exploit...");
+            
+            // Verificar que todas las dependencias estén cargadas
+            if (typeof int64 === 'undefined') {
+                logToConsole("[ERROR] int64.js no cargado");
+                updateStatus("Error", "Falta int64.js");
+                return;
+            }
+            
+            if (typeof rop === 'undefined') {
+                logToConsole("[ERROR] rop.js no cargado");
+                updateStatus("Error", "Falta rop.js");
+                return;
+            }
+            
+            if (typeof run_hax === 'undefined') {
+                logToConsole("[ERROR] kexploit.js no cargado correctamente");
+                updateStatus("Error", "Falta kexploit.js");
+                return;
+            }
+            
+            logToConsole("[OK] Todos los módulos cargados correctamente");
+            
             // Secuencia de estados visuales
             const steps = [
                 { text: "Inicializando primitivas ROP...", detail: "Paso 1/6: Configurando entorno", delay: 1500 },
@@ -544,6 +615,7 @@
                 if (currentStep < steps.length) {
                     const step = steps[currentStep];
                     updateStatus(step.text, step.detail);
+                    logToConsole(`[Progreso] ${step.text}`);
                     
                     setTimeout(() => {
                         currentStep++;
@@ -553,15 +625,17 @@
                     // Llamar al exploit real después de la secuencia visual
                     setTimeout(() => {
                         try {
-                            // Esta es la llamada al exploit real
+                            logToConsole("[Ejecución] Llamando a run_hax()...");
+                            // Esta es la llamada al exploit real de kexploit.js
                             if (typeof run_hax === 'function') {
                                 run_hax();
+                                logToConsole("[OK] run_hax() ejecutado correctamente");
                             } else {
-                                console.error("Función run_hax no encontrada");
+                                logToConsole("[ERROR] Función run_hax no encontrada");
                                 updateStatus("Error", "El exploit no se cargó correctamente");
                             }
                         } catch (error) {
-                            console.error("Error ejecutando exploit:", error);
+                            logToConsole(`[ERROR] Error ejecutando exploit: ${error.message}`);
                             updateStatus("Error", "Ocurrió un error durante la ejecución");
                         }
                     }, 1000);
@@ -581,8 +655,24 @@
         window.addEventListener('load', function() {
             setTimeout(() => {
                 document.querySelector('.logo').style.animation = 'none';
+                logToConsole("[Sistema] Interfaz d0 Exploit cargada correctamente");
+                logToConsole(`[Sistema] Versión: d0 Exploit v2.0 - ${new Date().toLocaleDateString()}`);
             }, 1000);
         });
+        
+        // Interceptar alertas del exploit para mostrarlas en nuestra consola
+        const originalAlert = window.alert;
+        window.alert = function(message) {
+            logToConsole(`[ALERTA] ${message}`);
+            
+            // Mostrar alertas importantes en la interfaz
+            if (message.includes("Insert USB") || message.includes("Inserta")) {
+                document.getElementById("statusText").textContent = "¡INSERTA USB AHORA!";
+                document.getElementById("statusDetail").textContent = message;
+            }
+            
+            return originalAlert(message);
+        };
     </script>
 </body>
 </html>
